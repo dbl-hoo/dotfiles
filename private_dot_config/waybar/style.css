@@ -1,0 +1,123 @@
+@import "colors.css";
+
+* {
+  font-family: monospace;
+  font-weight: bold;
+  font-size: 16px;
+  min-height: 0px;
+  }
+
+window#waybar {
+    background: transparent;
+}
+
+tooltip {
+  background: @tip;
+  border-radius: 20px;
+  border: 1px solid @border;
+}
+
+@keyframes blink-update {
+  to {
+    background-color: dodgerblue;
+  }
+}
+
+#workspaces {
+  margin-top: 10px;
+  background: @textdark;
+  padding: 5px;
+  border-radius: 10px;
+}
+
+#workspaces button {
+  padding: 5px;
+  color: #ffffff;
+  border-radius: 10px;
+}
+
+#workspaces button.active {
+  background: @accent;
+  color: @textdark;
+}
+
+#workspaces button:hover {
+  color: @textdark;
+  background: @border;
+}
+
+#clock{
+  margin-top: 10px;
+  margin-left: 10px;
+  padding-left: 5px;
+  padding-right: 5px;
+  background: @accent;
+  color: @textdark;
+  border-radius: 5px;
+  transition: none;
+}
+
+#clock, #pulseaudio, #network, #cpu, #memory, #battery, #custom-swaync, #custom-cliphist, #tray{
+  margin-top: 10px;
+  padding-left: 5px;
+  padding-right: 5px;
+  background: @accent;
+  color: @textdark;
+  border-radius: 10px;
+  }
+
+
+  #custom-pacman {
+  animation-timing-function: linear;
+  animation-iteration-count: infinite;
+  animation-direction: alternate;
+  margin-left: 5px;
+  border-radius: 10px;
+  margin-top: 10px;
+  padding-left: 5px;
+  padding-right: 5px;
+}
+
+#custom-pacman.pending-updates {
+  animation-name: blink-update;
+  animation-duration: 3s;
+  margin-right: 5px;
+  border-radius: 10px;
+  margin-top: 10px;
+  padding-left: 5px;
+  padding-right: 5px;
+}
+
+#pulseaudio {
+  border-radius: 10px 0 0 10px;
+  padding-right: 5px
+  }
+
+
+#network, #cpu, #memory, #battery, #custom-swaync, #custom-swaync{
+  border-radius: 0;
+}
+#custom-cliphist {
+  border-radius: 10px 0 0 10px;
+}
+
+#tray {
+    margin-left: 0px;
+    margin-right: 5px;
+    padding-left: 10px;
+    padding-right: 10px;
+    color: @textdark;
+    border-radius: 0 10px 10px 0;
+}
+
+
+#battery {
+  padding-right: 15px;
+  border-radius: 0 10px 10px 0;
+  margin-right: 5px;
+}
+
+#custom-spotify {
+    padding: 0 10px;
+    color: #ffffff;
+}

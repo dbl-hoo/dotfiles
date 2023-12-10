@@ -1,0 +1,54 @@
+# -----------------------------------------------------
+# ALIASES
+# -----------------------------------------------------
+
+alias c='clear'
+alias nf='neofetch'
+alias pf='pfetch'
+alias ls='eza -al'
+alias shutdown='systemctl poweroff'
+alias wifi='nmtui'
+alias h="cd ~"
+
+
+# -----------------------------------------------------
+# GIT
+# -----------------------------------------------------
+
+alias gs="git status"
+alias ga="git add"
+alias gc="git commit -m"
+alias gp="git push"
+alias gpl="git pull"
+alias gst="git stash"
+alias gsp="git stash; git pull"
+alias gcheck="git checkout"
+alias pacman="sudo pacman"
+
+# -----------------------------------------------------
+# SCRIPTS
+# -----------------------------------------------------
+
+alias gr='python ~/dotfiles/scripts/growthrate.py'
+alias ChatGPT='python ~/mychatgpt/mychatgpt.py'
+alias chat='python ~/mychatgpt/mychatgpt.py'
+alias ascii='~/Dotfiles/scripts/figlet.sh'
+
+
+# -----------------------------------------------------
+# EDIT CONFIG FILES
+# -----------------------------------------------------
+
+alias confz='subl ~/.zshrc'
+
+# -----------------------------------------------------
+# EDIT NOTES
+# -----------------------------------------------------
+
+alias notes='subl ~/notes.txt'
+
+# -----------------------------------------------------
+# SYSTEM
+# -----------------------------------------------------
+
+alias update-grub='sudo grub-mkconfig -o /boot/grub/grub.cfg'

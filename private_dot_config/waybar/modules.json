@@ -1,0 +1,123 @@
+// Modules configuration
+
+
+{
+"hyprland/workspaces": {
+    "persistent-workspaces": {
+    "*": 5, // 5 workspaces by default on every monitor
+    }
+},
+
+"tray": {
+    "spacing": 10
+},
+    
+"clock": {
+    "tooltip-format": "<big>{:%Y %B}</big>\n<tt><small>{calendar}</small></tt>",
+    "on-clickS": "vivaldi-stable --app=https://calendar.google.com"
+},
+
+"cpu": {
+    "format": " {usage}%",
+},
+
+"memory": {
+    "format": " {}%"
+},
+    
+"battery": {
+    "states": {
+            // "good": 95,
+            "warning": 30,
+            "critical": 15
+         },
+    "format": "{icon} {capacity}%",
+    "format-charging": " {capacity}%",
+    "format-plugged": " {capacity}%",
+    "format-alt": "{icon} {time}",
+    "format-icons": ["", "", "", "", ""]
+},
+
+"network": {
+    "format": "{ifname}",
+    "format-wifi": " ",
+    "format-ethernet": "  {ipaddr}",
+    "format-disconnected": "Not connected", //An empty format will hide the module.
+    "tooltip-format": " {ifname} via {gwaddri}",
+    "tooltip-format-wifi": "{ipaddr} {signalStrength}%",
+    "tooltip-format-ethernet": "  {ifname} ({ipaddr}/{cidr})",
+    "tooltip-format-disconnected": "Disconnected",
+    "max-length": 50,
+    "on-click": "kitty nmtui"
+},
+
+"pulseaudio": {
+    "format": "{icon} {volume}% ",
+    "format-bluetooth": "{icon}  {volume}% {format_source}",
+    "format-bluetooth-muted": " {icon} {format_source}",
+    "format-muted": " {format_source}",
+    "format-source": "{volume}% ",
+    "format-source-muted": "",
+    "format-icons": {
+        "headphone": "",
+        "hands-free": "",
+        "headset": "",
+        "phone": "",
+        "portable": "",
+        "car": "",
+        "default": ["", "", ""]
+    },
+    "on-click": "pavucontrol"
+},
+
+"custom/swaync": {
+    "tooltip": false,
+    "format": "{icon}",
+    "format-icons": {
+        "notification": "<span foreground='red'><sup></sup></span>",
+        "none": "",
+        "dnd-notification": "<span foreground='red'><sup></sup></span>",
+        "dnd-none": "",
+        "inhibited-notification": "<span foreground='red'><sup></sup></span>",
+        "inhibited-none": "",
+        "dnd-inhibited-notification": "<span foreground='red'><sup></sup></span>",
+        "dnd-inhibited-none": ""
+    },
+    "return-type": "json",
+    "exec-if": "which swaync-client",
+    "exec": "swaync-client -swb",
+    "on-click": "swaync-client -t -sw",
+    "on-click-right": "swaync-client -d -sw",
+    "escape": true
+},
+
+"custom/spotify": {
+    "exec": "/usr/bin/python3 /home/kirkham/scripts/mediaplayer.py --player spotify",
+    "format": "{}  ",
+    "return-type": "json",
+    "max-length": 40,
+    "on-click": "playerctl play-pause",
+    "on-click-right": "playerctl next"
+},
+
+"custom/pacman": {
+    "format": "{icon}{}",
+    "return-type": "json",
+    "format-icons": {
+        "pending-updates": " ",
+        "updated": ""
+    },
+    "exec-if": "which waybar-updates",
+    "exec": "waybar-updates",
+    "on-click": "kitty ~/scripts/archupdate.sh"
+},
+
+"custom/cliphist": {
+    "format": "",
+    "on-click": "sleep 0.1 && ~/scripts/cliphist.sh",
+    "on-click-right": "sleep 0.1 && ~/scripts/cliphist.sh d",
+    "on-click-middle": "sleep 0.1 && ~/scripts/cliphist.sh w",
+    "tooltip": false
+},
+
+}

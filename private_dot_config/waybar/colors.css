@@ -1,0 +1,9 @@
+@import '../../.cache/wal/colors-waybar.css';
+
+@define-color bg0   @color5;
+@define-color bg1   @color1;
+@define-color tip   #221e1b;
+@define-color accent @color5;
+@define-color text #ffffff;
+@define-color textdark #000000;
+@define-color border @color7;
