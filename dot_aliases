@@ -8,7 +8,6 @@ alias pf='pfetch'
 alias ls='eza -al'
 alias shutdown='systemctl poweroff'
 alias wifi='nmtui'
-alias h="cd ~"
 
 
 # -----------------------------------------------------
