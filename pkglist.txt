@@ -5,7 +5,7 @@ adapta-gtk-theme
 alsa-firmware
 alsa-utils
 arc-gtk-theme
-archlinux-wallpaper
+arch-install-scripts
 base
 base-devel
 bash-completion
@@ -27,6 +27,7 @@ eza
 fastfetch
 figlet
 font-manager
+foot
 gedit
 git
 gparted
@@ -55,6 +56,7 @@ nano
 neofetch
 network-manager-applet
 networkmanager
+nfs-utils
 openssh
 os-prober
 papirus-icon-theme
@@ -71,6 +73,7 @@ qemu-desktop
 qt5-wayland
 qt6-wayland
 rofi
+rsync
 sddm
 snap-pac
 snapper
