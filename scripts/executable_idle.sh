@@ -2,7 +2,7 @@
 
 # Set the timeout values in seconds (5 minutes = 300 seconds, 6 minutes = 360 seconds)
 lock_timeout=300
-total_timeout=600
+total_timeout=360
 
 # Start swayidle with the specified timeouts
 swayidle -w \
