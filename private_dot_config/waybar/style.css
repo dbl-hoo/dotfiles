@@ -20,6 +20,7 @@ tooltip {
 @keyframes blink-update {
   to {
     background-color: @accent;
+    color: @contrast;
   }
 }
 
@@ -152,5 +153,5 @@ tooltip {
     padding-right: 5px;
     border-radius: 10px;
     border: 2px solid @accent;
-    color: @accent;
+    color: @contrast;
 }
