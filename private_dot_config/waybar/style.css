@@ -57,6 +57,17 @@ tooltip {
   transition: none;
 }
 
+#custom-power{
+  margin-top: 10px;
+  margin-left: 10px;
+  padding-left: 5px;
+  padding-right: 5px;
+  background: @accent;
+  color: @textdark;
+  border-radius: 5px;
+  transition: none;
+}
+
 #clock, #pulseaudio, #network, #cpu, #memory, #battery, #custom-swaync, #custom-cliphist, #tray{
   margin-top: 10px;
   padding-left: 5px;

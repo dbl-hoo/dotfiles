@@ -1,5 +1,28 @@
 #!/bin/sh
 
+#mount network drive
+#!/bin/bash
+
+# Replace these values with your actual information
+remote_server="storage.home"
+exported_path="/volume1/Jason_Laptop"
+local_mount_point="/mnt"
+
+# Create the local mount point directory if it doesn't exist
+mkdir -p $local_mount_point
+
+# Mount the network drive using the NFS protocol
+mount -t nfs $remote_server:$exported_path $local_mount_point
+
+# Check if the mount was successful
+if [ $? -eq 0 ]; then
+    echo "NFS shared drive mounted successfully at $local_mount_point"
+else
+    echo "Failed to mount NFS shared drive. Check your settings and try again."
+fi
+
+# perform backup
+
 ## my own rsync-based snapshot-style backup procedure
 ## (cc) marcio rps AT gmail.com
 
@@ -32,4 +55,14 @@ if [ $COUNT -gt $MINCHANGES ] ; then
                 mv $SNAP/rsync.log $SNAP/$DATETAG
                chmod u-w $SNAP/$DATETAG
          fi
+fi
+
+
+# unmount drive
+umount /mnt/
+
+if [ $? -eq 0 ]; then
+  echo "Backup unmounted"
+else
+  echo "Unmount failed."
 fi

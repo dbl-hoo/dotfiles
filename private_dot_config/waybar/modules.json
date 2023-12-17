@@ -120,4 +120,11 @@
     "tooltip": false
 },
 
+    // Power Menu
+    "custom/exit": {
+        "format": "",
+        "on-click": "~/.config/rofi/powermenu/type-4/powermenu.sh",
+        "tooltip": false
+    },
+    
 }
