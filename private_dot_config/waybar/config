@@ -9,7 +9,7 @@
 "include": ["~/.config/waybar/modules.json"],
 
 
-"modules-left": ["clock", "custom/pacman", "custom/spotify"],
+"modules-left": ["clock", "custom/pacman", "wlr/taskbar", "custom/spotify"],
 "modules-center": ["hyprland/workspaces"],
 "modules-right": ["pulseaudio", "cpu", "memory", "battery", "custom/cliphist", "tray", "custom/power"]
 

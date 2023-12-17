@@ -121,10 +121,19 @@
 },
 
     // Power Menu
-    "custom/exit": {
+    "custom/power": {
         "format": "",
         "on-click": "~/.config/rofi/powermenu/type-4/powermenu.sh",
         "tooltip": false
     },
-    
+
+    // Taskbar
+    "wlr/taskbar": {
+        "format": "{icon}",
+        "icon-size": 18,
+        "tooltip-format": "{title}",
+        "on-click": "activate",
+        "on-click-right": "close",
+    },
+
 }

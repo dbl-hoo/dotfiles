@@ -19,7 +19,7 @@ tooltip {
 
 @keyframes blink-update {
   to {
-    background-color: dodgerblue;
+    background-color: @accent;
   }
 }
 
@@ -46,6 +46,22 @@ tooltip {
   background: @border;
 }
 
+#taskbar {
+    margin-top: 10px;
+    margin-left: 5px;
+    padding-left: 5px;
+    padding-right: 5px;
+    border-radius: 10px;
+    border: 2px solid @accent;
+}
+
+#taskbar button {
+    margin:0;
+    border-radius: 15px;
+    padding: 0px 5px 0px 5px;
+}
+
+
 #clock{
   margin-top: 10px;
   margin-left: 10px;
@@ -59,7 +75,8 @@ tooltip {
 
 #custom-power{
   margin-top: 10px;
-  margin-left: 10px;
+  margin-left: 5px;
+  margin-right: 10px;
   padding-left: 5px;
   padding-right: 5px;
   background: @accent;
@@ -68,17 +85,17 @@ tooltip {
   transition: none;
 }
 
-#clock, #pulseaudio, #network, #cpu, #memory, #battery, #custom-swaync, #custom-cliphist, #tray{
+#clock, #custom-power, #pulseaudio, #network, #cpu, #memory, #battery, #custom-swaync, #custom-cliphist, #tray{
   margin-top: 10px;
-  padding-left: 5px;
-  padding-right: 5px;
+  padding-left: 10px;
+  padding-right: 10px;
   background: @accent;
   color: @textdark;
   border-radius: 10px;
   }
 
 
-  #custom-pacman {
+#custom-pacman {
   animation-timing-function: linear;
   animation-iteration-count: infinite;
   animation-direction: alternate;
@@ -92,7 +109,7 @@ tooltip {
 #custom-pacman.pending-updates {
   animation-name: blink-update;
   animation-duration: 3s;
-  margin-right: 5px;
+  margin-right: 0px;
   border-radius: 10px;
   margin-top: 10px;
   padding-left: 5px;
@@ -114,7 +131,7 @@ tooltip {
 
 #tray {
     margin-left: 0px;
-    margin-right: 5px;
+    margin-right: 0px;
     padding-left: 10px;
     padding-right: 10px;
     color: @textdark;
@@ -129,6 +146,11 @@ tooltip {
 }
 
 #custom-spotify {
-    padding: 0 10px;
-    color: #ffffff;
+    margin-top: 10px;
+    margin-left: 5px;
+    padding-left: 5px;
+    padding-right: 5px;
+    border-radius: 10px;
+    border: 2px solid @accent;
+    color: @accent;
 }
