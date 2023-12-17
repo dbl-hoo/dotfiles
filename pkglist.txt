@@ -50,6 +50,7 @@ linux
 linux-firmware
 linux-headers
 linux-zen
+meld
 mesa-utils
 mkinitcpio
 nano
@@ -68,6 +69,7 @@ pipewire-media-session
 pipewire-pulse
 plocate
 polkit-gnome
+powertop
 python-pyqt5
 qemu-desktop
 qt5-wayland
