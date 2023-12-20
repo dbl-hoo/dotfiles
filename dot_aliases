@@ -8,7 +8,8 @@ alias pf='pfetch'
 alias ls='eza -al'
 alias shutdown='systemctl poweroff'
 alias wifi='nmtui'
-
+alias wgup = 'wg-quick up home'
+alias wgdn = 'wg-quick up down home'
 
 # -----------------------------------------------------
 # GIT

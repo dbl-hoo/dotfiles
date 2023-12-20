@@ -53,7 +53,7 @@ tooltip {
     padding-left: 5px;
     padding-right: 5px;
     border-radius: 10px;
-    border: 2px solid @accent;
+    background: @accent;
 }
 
 #taskbar button {
@@ -152,6 +152,6 @@ tooltip {
     padding-left: 5px;
     padding-right: 5px;
     border-radius: 10px;
-    border: 2px solid @accent;
-    color: @contrast;
+    background: @accent;
+    color: @textdark;
 }
