@@ -7,7 +7,7 @@ alias nf='neofetch'
 alias pf='pfetch'
 alias ff='fastfetch'
 alias ls='eza -al'
-alias 
+alias ca='chezmoi apply'
 alias shutdown='systemctl poweroff'
 alias wifi='nmtui'
 alias wgup='wg-quick up home'

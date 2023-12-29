@@ -14,7 +14,7 @@
     
 "clock": {
     "tooltip-format": "<big>{:%Y %B}</big>\n<tt><small>{calendar}</small></tt>",
-    "on-click": "vivaldi-stable --app=https://calendar.google.com"
+    "on-click": "$BROWSER -new-window https://calendar.google.com"
 },
 
 "cpu": {
