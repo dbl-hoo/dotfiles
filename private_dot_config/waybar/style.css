@@ -126,7 +126,7 @@ tooltip {
 #network, #cpu, #memory, #battery, #custom-swaync, #custom-swaync{
   border-radius: 0;
 }
-#custom-cliphist {
+#custom-cliphist, #custom-swaync {
   border-radius: 10px 0 0 10px;
 }
 

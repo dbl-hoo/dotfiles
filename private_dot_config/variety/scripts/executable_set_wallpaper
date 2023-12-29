@@ -256,11 +256,7 @@ if pgrep -x "Hyprland" > /dev/null; then
     --transition-type=random \
     --transition-duration=0.7 \
     --transition-pos "$( hyprctl cursorpos )"
-    sleep 1
     ~/scripts/waybar_launch.sh
-    cp $WP ~/.cache/current_wallpaper.jpg
-    cp $WP /usr/share/sddm/themes/sugar-candy/Backgrounds/current_wallpaper.jpg
-
 fi
 
 # trinity
