@@ -1,4 +1,10 @@
-pfetch
+# Check if the shell is running in a terminal emulator
+if [[ "$TERM" = "xterm-kitty" ]]; then
+    # Your command or script to run when in a terminal emulator
+    pfetch
+fi
+
+
 # Enable Powerlevel10k instant prompt. Should stay close to the top of ~/.zshrc.
 # Initialization code that may require console input (password prompts, [y/n]
 # confirmations, etc.) must go above this block; everything else may go below.
