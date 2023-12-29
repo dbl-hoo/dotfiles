@@ -1,7 +1,6 @@
 @import "colors.css";
 
 * {
-  font-family: monospace;
   font-weight: bold;
   font-size: 16px;
   min-height: 0px;
@@ -32,7 +31,8 @@ tooltip {
 }
 
 #workspaces button {
-  padding: 5px;
+  padding: 3px;
+  margin: 2px;
   color: #ffffff;
   border-radius: 10px;
 }
@@ -43,29 +43,38 @@ tooltip {
 }
 
 #workspaces button:hover {
-  color: @textdark;
+  color: @contrast;
   background: @border;
 }
 
 #taskbar {
-    margin-top: 10px;
-    margin-left: 5px;
-    padding-left: 5px;
-    padding-right: 5px;
-    border-radius: 10px;
-    background: @accent;
+  margin-top: 10px;
+  background: @accent;
+  padding: 5px;
+  border-radius: 10px;
 }
 
 #taskbar button {
-    margin:0;
-    border-radius: 15px;
-    padding: 0px 5px 0px 5px;
+  padding: 3px;
+  margin: 2px;
+  color: #ffffff;
+  border-radius: 10px;
 }
 
+#taskbar button.active {
+  background: @border;
+  color: @textdark;
+}
+
+#taskbar button:hover {
+  color: @textdark;
+  background: @contrast;
+}
 
 #clock{
   margin-top: 10px;
   margin-left: 10px;
+  margin-right: 5px;
   padding-left: 5px;
   padding-right: 5px;
   background: @accent;
