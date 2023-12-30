@@ -95,7 +95,7 @@ tooltip {
   transition: none;
 }
 
-#clock, #custom-power, #pulseaudio, #network, #cpu, #memory, #battery, #custom-swaync, #custom-cliphist, #tray{
+#clock, #custom-power, #pulseaudio, #network, #cpu, #memory, #battery, #custom-swaync, #custom-cliphist, #tray, #pulseaudio-slider{
   margin-top: 10px;
   padding-left: 10px;
   padding-right: 10px;
@@ -135,7 +135,8 @@ tooltip {
 #network, #cpu, #memory, #battery, #custom-swaync, #custom-swaync{
   border-radius: 0;
 }
-#custom-cliphist, #custom-swaync {
+
+#custom-cliphist, #pulseaudio-slider, #custom-swaync {
   border-radius: 10px 0 0 10px;
 }
 
@@ -163,4 +164,27 @@ tooltip {
     border-radius: 10px;
     background: @accent;
     color: @textdark;
+}
+
+
+#pulseaudio-slider slider {
+  min-height: 0px;
+  min-width: 0px;
+  opacity: 0;
+  background-image: none;
+  border: none;
+  box-shadow: none;
+}
+
+#pulseaudio-slider trough {
+min-height: 10px;
+min-width: 80px;
+border-radius: 5px;
+background-color: black;
+}
+
+#pulseaudio-slider highlight {
+min-width: 10px;
+border-radius: 5px;
+background-color: @contrast;
 }

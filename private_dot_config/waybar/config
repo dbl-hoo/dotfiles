@@ -11,7 +11,7 @@
 
 "modules-left": ["clock", "custom/pacman", "wlr/taskbar", "custom/spotify"],
 "modules-center": ["hyprland/workspaces"],
-"modules-right": ["pulseaudio", "cpu", "memory", "battery", "custom/swaync", "tray", "custom/power"]
+"modules-right": ["pulseaudio/slider", "cpu", "memory", "battery", "custom/swaync", "tray", "custom/power"]
 
 }
 
