@@ -249,6 +249,7 @@ fi
 if pgrep -x "Hyprland" > /dev/null; then
     wal -i "$WP" -n 
     source "$HOME/.cache/wal/colors.sh"
+    wpg -s "$WP" -n
     swww init
     swww img "$WP" \
     --transition-bezier .43,1.19,1,.4 \
