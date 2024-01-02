@@ -1,3 +1,6 @@
+@import '../../.cache/wal/colors-wlogout.css';
+
+
 * {
 	background-image: none;
 }
@@ -14,8 +17,18 @@ button {
 	background-size: 25%;
 }
 
-button:focus, button:active, button:hover {
-	background-color: #3700B3;
+button:focus {
+	background-color: #1E1E1E;
+	outline-style: none;
+}
+
+button:hover {
+	background-color: @color4;
+	outline-style: none;
+}
+
+button:active {
+	background-color: white;
 	outline-style: none;
 }
 
