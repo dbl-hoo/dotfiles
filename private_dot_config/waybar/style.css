@@ -18,7 +18,7 @@ tooltip {
 
 @keyframes blink-update {
   to {
-    background-color: @accent;
+    background-color: @flash;
     color: @contrast;
   }
 }
@@ -97,7 +97,7 @@ tooltip {
   transition: none;
 }
 
-#clock, #custom-power, #pulseaudio, #network, #cpu, #memory, #battery, #custom-swaync, #custom-cliphist, #tray, #pulseaudio-slider{
+#clock, #custom-pacman, #custom-power, #pulseaudio, #network, #cpu, #memory, #battery, #custom-swaync, #custom-cliphist, #tray, #pulseaudio-slider{
   margin-top: 10px;
   padding-left: 10px;
   padding-right: 10px;
@@ -108,24 +108,15 @@ tooltip {
 
 
 #custom-pacman {
+  margin-right: 5px;
   animation-timing-function: linear;
   animation-iteration-count: infinite;
   animation-direction: alternate;
-  margin-left: 5px;
-  border-radius: 10px;
-  margin-top: 10px;
-  padding-left: 5px;
-  padding-right: 5px;
 }
 
 #custom-pacman.pending-updates {
   animation-name: blink-update;
   animation-duration: 3s;
-  margin-right: 0px;
-  border-radius: 10px;
-  margin-top: 10px;
-  padding-left: 5px;
-  padding-right: 5px;
 }
 
 #pulseaudio {
