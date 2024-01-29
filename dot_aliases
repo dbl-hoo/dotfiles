@@ -12,6 +12,7 @@ alias lt='eza -a --tree --level=1 --icons'
 alias ca='chezmoi apply'
 alias shutdown='sudo poweroff'
 alias wifi='nmtui'
+alias reboot='sudo reboot'
 
 # -----------------------------------------------------
 # GIT

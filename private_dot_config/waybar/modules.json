@@ -120,11 +120,12 @@
     "tooltip": false
 },
 
-"custom/menu": {
-    "format": "",
-    "on-click": "~/.config/rofi/scripts/launcher_t2",
+"custom/appmenuicon": {
+    "format": "",
+    "on-click": "rofi -show drun -replace",
     "tooltip": false
-},
+},  
+
 
     // Power Menu
     "custom/power": {
