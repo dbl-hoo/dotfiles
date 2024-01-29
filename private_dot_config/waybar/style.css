@@ -75,7 +75,7 @@ tooltip {
 
 #clock{
   margin-top: 10px;
-  margin-left: 10px;
+  margin-left: 5px;
   margin-right: 5px;
   padding-left: 5px;
   padding-right: 5px;
@@ -97,7 +97,7 @@ tooltip {
   transition: none;
 }
 
-#clock, #custom-pacman, #custom-power, #pulseaudio, #network, #cpu, #memory, #battery, #custom-swaync, #custom-cliphist, #tray, #pulseaudio-slider{
+#custom-menu, #clock, #custom-pacman, #custom-power, #pulseaudio, #network, #cpu, #memory, #battery, #custom-swaync, #custom-cliphist, #tray, #pulseaudio-slider{
   margin-top: 10px;
   padding-left: 10px;
   padding-right: 10px;
@@ -117,6 +117,13 @@ tooltip {
 #custom-pacman.pending-updates {
   animation-name: blink-update;
   animation-duration: 3s;
+}
+
+#custom-menu{
+  font-size: 24px;
+  padding-left: 20px;
+  padding-right: 20px;
+  margin-right: 0px;
 }
 
 #pulseaudio {
