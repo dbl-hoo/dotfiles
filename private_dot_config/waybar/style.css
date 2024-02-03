@@ -73,6 +73,10 @@ tooltip {
   background: @contrast;
 }
 
+#taskbar.empty {
+  background-color:transparent;
+}
+
 #clock{
   margin-top: 10px;
   margin-left: 5px;
