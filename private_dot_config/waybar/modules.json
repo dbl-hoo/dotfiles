@@ -86,7 +86,7 @@
     "return-type": "json",
     "exec-if": "which swaync-client",
     "exec": "swaync-client -swb",
-    "on-click": "swaync-client -t -sw",
+    "on-click": "sleep 0.1; swaync-client -t -sw",
     "on-click-right": "swaync-client -d -sw",
     "escape": true
 },
@@ -109,6 +109,18 @@
     },
     "exec-if": "which waybar-updates",
     "exec": "waybar-updates",
+    "on-click": "kitty ~/scripts/archupdate.sh"
+},
+
+"custom/updates": {
+    "format": "{} {icon}",
+    "return-type": "json",
+    "format-icons": {
+        "has-updates": "󱍷",
+        "updated": "󰂪"
+    },
+    "exec-if": "which waybar-module-pacman-updates",
+    "exec": "waybar-module-pacman-updates",
     "on-click": "kitty ~/scripts/archupdate.sh"
 },
 

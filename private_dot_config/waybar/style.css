@@ -101,7 +101,7 @@ tooltip {
   transition: none;
 }
 
-#custom-appmenuicon, #clock, #custom-pacman, #custom-power, #pulseaudio, #network, #cpu, #memory, #battery, #custom-swaync, #custom-cliphist, #tray, #pulseaudio-slider{
+#custom-appmenuicon, #clock, #custom-pacman, #custom-updates, #custom-power, #pulseaudio, #network, #cpu, #memory, #battery, #custom-swaync, #custom-cliphist, #tray, #pulseaudio-slider{
   margin-top: 10px;
   padding-left: 10px;
   padding-right: 10px;
@@ -111,14 +111,14 @@ tooltip {
   }
 
 
-#custom-pacman {
+#custom-pacman, #custom-updates {
   margin-right: 5px;
   animation-timing-function: linear;
   animation-iteration-count: infinite;
   animation-direction: alternate;
 }
 
-#custom-pacman.pending-updates {
+#custom-pacman.pending-updates, #custom-updates.has-updates {
   animation-name: blink-update;
   animation-duration: 3s;
 }
