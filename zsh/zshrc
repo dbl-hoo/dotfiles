@@ -1,0 +1,53 @@
+# ~/.zshrc (Linux)
+
+# ---- Paths
+export ZSH_PLUGIN_DIR="$HOME/.zsh/plugins"
+
+# ---- History
+HISTSIZE=10000
+SAVEHIST=10000
+HISTFILE="$HOME/.zsh_history"
+setopt HIST_IGNORE_DUPS HIST_IGNORE_SPACE SHARE_HISTORY
+
+# ---- Completion
+autoload -U compinit && compinit
+
+# ---- Plugins (safe sourcing)
+# autosuggestions
+if [[ -r "$ZSH_PLUGIN_DIR/zsh-autosuggestions/zsh-autosuggestions.zsh" ]]; then
+  source "$ZSH_PLUGIN_DIR/zsh-autosuggestions/zsh-autosuggestions.zsh"
+else
+  print -P "%F{yellow}zsh-autosuggestions missing%f (expected in $ZSH_PLUGIN_DIR)"
+fi
+
+# syntax-highlighting (must be last-ish)
+if [[ -r "$ZSH_PLUGIN_DIR/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh" ]]; then
+  source "$ZSH_PLUGIN_DIR/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh"
+else
+  print -P "%F{yellow}zsh-syntax-highlighting missing%f (expected in $ZSH_PLUGIN_DIR)"
+fi
+
+# ---- Powerlevel10k
+if [[ -r "$ZSH_PLUGIN_DIR/powerlevel10k/powerlevel10k.zsh-theme" ]]; then
+  source "$ZSH_PLUGIN_DIR/powerlevel10k/powerlevel10k.zsh-theme"
+  [[ -f "$HOME/.p10k.zsh" ]] && source "$HOME/.p10k.zsh"
+else
+  print -P "%F{yellow}powerlevel10k missing%f (expected in $ZSH_PLUGIN_DIR)"
+fi
+
+# ---- Aliases
+# NOTE: eza may not be installed yet; keep it optional.
+alias ll='ls -lah'
+command -v eza >/dev/null 2>&1 && alias ll='eza -lah --icons'
+
+alias gs='git status'
+alias ga='git add'
+alias gc='git commit -m'
+alias gp='git push'
+alias ff='fastfetch'
+alias c='clear'
+
+# ---- Run fastfetch on interactive shells only, and only if installed
+if [[ $- == *i* ]] && command -v fastfetch >/dev/null 2>&1; then
+  fastfetch
+fi
