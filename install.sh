@@ -102,25 +102,20 @@ chsh -s "${ZSH_PATH}" "${TARGET_USER}" || true
 log "Preparing dotfiles directory: ${DOTFILES_DIR}"
 install -d -m 0755 -o "${TARGET_USER}" -g "${TARGET_USER}" "$(dirname "${DOTFILES_DIR}")"
 
-clone_repo() {
-  local url="$1"
-  run_as_user "${TARGET_USER}" "git clone --branch '${DOTFILES_BRANCH}' '${url}' '${DOTFILES_DIR}'"
-}
+# If directory exists, always enforce ownership
+if [[ -d "${DOTFILES_DIR}" ]]; then
+  chown -R "${TARGET_USER}:${TARGET_USER}" "${DOTFILES_DIR}"
+fi
 
 if [[ -d "${DOTFILES_DIR}/.git" ]]; then
   log "Dotfiles repo already present; pulling latest"
-  run_as_user "${TARGET_USER}" "git -C '${DOTFILES_DIR}' fetch --all"
-  run_as_user "${TARGET_USER}" "git -C '${DOTFILES_DIR}' checkout '${DOTFILES_BRANCH}'"
-  run_as_user "${TARGET_USER}" "git -C '${DOTFILES_DIR}' pull --ff-only"
+  sudo -u "${TARGET_USER}" git -C "${DOTFILES_DIR}" fetch --all
+  sudo -u "${TARGET_USER}" git -C "${DOTFILES_DIR}" checkout "${DOTFILES_BRANCH}"
+  sudo -u "${TARGET_USER}" git -C "${DOTFILES_DIR}" pull --ff-only
 else
   log "Cloning dotfiles repo"
-  # Try SSH first, fall back to HTTPS (avoids needing the user's GitHub SSH key on the server)
-  if clone_repo "${DOTFILES_REPO_SSH}"; then
-    echo "Cloned via SSH."
-  else
-    warn "SSH clone failed. Falling back to HTTPS."
-    clone_repo "${DOTFILES_REPO_HTTPS}"
-  fi
+  sudo -u "${TARGET_USER}" git clone --branch "${DOTFILES_BRANCH}" \
+    "${DOTFILES_REPO_SSH}" "${DOTFILES_DIR}"
 fi
 
 log "Linking configs from dotfiles repo into ${TARGET_HOME}"
