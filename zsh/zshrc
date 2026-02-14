@@ -47,6 +47,25 @@ alias gp='git push'
 alias ff='fastfetch'
 alias c='clear'
 
+# Basic replacement for 'ls'
+alias ls='eza --icons --group-directories-first'
+
+# The 'long' view (replaces ll)
+# Adds: file sizes, headers, and git status symbols
+alias ll='eza -lahg --icons --git --group-directories-first'
+
+# The 'all' view (includes hidden files)
+alias la='eza -a --icons'
+
+# Tree view
+alias tree='eza --tree --icons'
+
+# Replace cat with bat for better reading
+alias cat='bat --paging=never'
+
+# Use bat for viewing files with a pager (helpful for logs)
+alias less='bat'
+
 # ---- Run fastfetch on interactive shells only, and only if installed
 if [[ $- == *i* ]] && command -v fastfetch >/dev/null 2>&1; then
   fastfetch

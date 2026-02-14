@@ -43,7 +43,7 @@ else
   warn "No /etc/os-release found. Continuing anyway."
 fi
 
-log "Updating apt + installing packages"
+log "Updating apt + installing dependencies"
 export DEBIAN_FRONTEND=noninteractive
 apt-get update -y
 
@@ -56,20 +56,36 @@ PKGS=(
   locales
   tzdata
   openssh-client
+  gnupg
+  wget
 )
 
-# nice-to-haves (optional)
-OPTIONAL_PKGS=(fontconfig bat eza)
+apt-get install -y "${PKGS[@]}"
 
-# fastfetch (prefer apt if available)
-if apt-cache show fastfetch >/dev/null 2>&1; then
-  PKGS+=(fastfetch)
-else
-  warn "fastfetch not found in apt repos. Will install via GitHub release later (amd64 only)."
+log "Adding eza repository (Debian Bookworm)"
+# Bookworm doesn't have eza in main repos; we add the community repo
+if ! has_cmd eza; then
+  mkdir -p /etc/apt/keyrings
+  wget -qO- https://raw.githubusercontent.com/eza-community/eza/main/deb.asc | gpg --dearmor -o /etc/apt/keyrings/gierrt.gpg
+  echo "deb [signed-by=/etc/apt/keyrings/gierrt.gpg] http://deb.gierrt.me debian main" | tee /etc/apt/sources.list.d/gierrt.list
+  apt-get update -y
 fi
 
-apt-get install -y "${PKGS[@]}"
+log "Installing main packages"
+OPTIONAL_PKGS=(fontconfig bat eza)
+
+# fastfetch (check repo availability)
+if apt-cache show fastfetch >/dev/null 2>&1; then
+  OPTIONAL_PKGS+=(fastfetch)
+fi
+
 apt-get install -y "${OPTIONAL_PKGS[@]}" || true
+
+log "Creating symlinks for bat and eza"
+# Debian names the 'bat' executable 'batcat' to avoid conflicts
+if has_cmd batcat && ! has_cmd bat; then
+  ln -sf /usr/bin/batcat /usr/local/bin/bat
+fi
 
 log "Ensuring locale exists (en_US.UTF-8)"
 if ! locale -a | grep -qi '^en_US\.utf8$'; then
@@ -81,8 +97,8 @@ update-locale LANG=en_US.UTF-8 || true
 log "Ensuring user '${TARGET_USER}' exists"
 if ! id -u "${TARGET_USER}" >/dev/null 2>&1; then
   adduser --disabled-password --gecos "" "${TARGET_USER}"
-  passwd "${TARGET_USER}" || true
-  warn "User created. If you skipped password, set it with: passwd ${TARGET_USER}"
+  echo "Please set a password for ${TARGET_USER}:"
+  passwd "${TARGET_USER}"
 else
   echo "User exists: ${TARGET_USER}"
 fi
@@ -94,18 +110,17 @@ fi
 
 log "Ensuring '${TARGET_USER}' is in sudo group"
 usermod -aG sudo "${TARGET_USER}"
+if ! grep -q "^%sudo" /etc/sudoers; then
+  echo "%sudo ALL=(ALL:ALL) ALL" >> /etc/sudoers
+fi
 
-log "Setting default shell to zsh for '${TARGET_USER}'"
+log "Setting default shell to zsh"
 ZSH_PATH="$(command -v zsh)"
 chsh -s "${ZSH_PATH}" "${TARGET_USER}" || true
 
 log "Preparing dotfiles directory: ${DOTFILES_DIR}"
-install -d -m 0755 -o "${TARGET_USER}" -g "${TARGET_USER}" "$(dirname "${DOTFILES_DIR}")"
-
-# If directory exists, always enforce ownership
-if [[ -d "${DOTFILES_DIR}" ]]; then
-  chown -R "${TARGET_USER}:${TARGET_USER}" "${DOTFILES_DIR}"
-fi
+mkdir -p "$(dirname "${DOTFILES_DIR}")"
+chown "${TARGET_USER}:${TARGET_USER}" "$(dirname "${DOTFILES_DIR}")"
 
 if [[ -d "${DOTFILES_DIR}/.git" ]]; then
   log "Dotfiles repo already present; pulling latest"
@@ -114,17 +129,13 @@ if [[ -d "${DOTFILES_DIR}/.git" ]]; then
   sudo -u "${TARGET_USER}" git -C "${DOTFILES_DIR}" pull --ff-only
 else
   log "Cloning dotfiles repo"
-  sudo -u "${TARGET_USER}" git clone --branch "${DOTFILES_BRANCH}" \
-    "${DOTFILES_REPO_SSH}" "${DOTFILES_DIR}"
+  if ! sudo -u "${TARGET_USER}" git clone --branch "${DOTFILES_BRANCH}" "${DOTFILES_REPO_SSH}" "${DOTFILES_DIR}"; then
+    warn "SSH clone failed. Falling back to HTTPS."
+    sudo -u "${TARGET_USER}" git clone --branch "${DOTFILES_BRANCH}" "${DOTFILES_REPO_HTTPS}" "${DOTFILES_DIR}"
+  fi
 fi
 
-log "Linking configs from dotfiles repo into ${TARGET_HOME}"
-
-# Your repo layout (per what you showed):
-#   zsh/zshrc
-#   zsh/p10k.zsh
-#   fastfetch/config.jsonc
-
+log "Linking configs"
 ZSHRC_SRC="${DOTFILES_DIR}/zsh/zshrc"
 P10K_SRC="${DOTFILES_DIR}/zsh/p10k.zsh"
 FF_SRC="${DOTFILES_DIR}/fastfetch/config.jsonc"
@@ -136,25 +147,11 @@ FF_DST="${FF_DIR}/config.jsonc"
 
 run_as_user "${TARGET_USER}" "mkdir -p '${FF_DIR}'"
 
-if [[ -f "${ZSHRC_SRC}" ]]; then
-  run_as_user "${TARGET_USER}" "ln -sf '${ZSHRC_SRC}' '${ZSHRC_DST}'"
-else
-  warn "Missing ${ZSHRC_SRC}. (Repo should contain zsh/zshrc)"
-fi
+[[ -f "${ZSHRC_SRC}" ]] && run_as_user "${TARGET_USER}" "ln -sf '${ZSHRC_SRC}' '${ZSHRC_DST}'"
+[[ -f "${P10K_SRC}" ]] && run_as_user "${TARGET_USER}" "ln -sf '${P10K_SRC}' '${P10K_DST}'"
+[[ -f "${FF_SRC}" ]] && run_as_user "${TARGET_USER}" "ln -sf '${FF_SRC}' '${FF_DST}'"
 
-if [[ -f "${P10K_SRC}" ]]; then
-  run_as_user "${TARGET_USER}" "ln -sf '${P10K_SRC}' '${P10K_DST}'"
-else
-  warn "Missing ${P10K_SRC}. (Repo should contain zsh/p10k.zsh)"
-fi
-
-if [[ -f "${FF_SRC}" ]]; then
-  run_as_user "${TARGET_USER}" "ln -sf '${FF_SRC}' '${FF_DST}'"
-else
-  warn "Missing ${FF_SRC}. (Repo should contain fastfetch/config.jsonc)"
-fi
-
-log "Installing zsh plugins into ${TARGET_HOME}/.zsh/plugins (as ${TARGET_USER})"
+log "Installing zsh plugins"
 PLUGIN_DIR="${TARGET_HOME}/.zsh/plugins"
 run_as_user "${TARGET_USER}" "mkdir -p '${PLUGIN_DIR}'"
 
@@ -166,10 +163,8 @@ run_as_user "${TARGET_USER}" "
     local name=\"\$1\"
     local url=\"\$2\"
     if [[ -d \"\$name/.git\" ]]; then
-      echo \"Updating \$name...\"
       git -C \"\$name\" pull --ff-only
     else
-      echo \"Cloning \$name...\"
       git clone --depth=1 \"\$url\" \"\$name\"
     fi
   }
@@ -179,21 +174,13 @@ run_as_user "${TARGET_USER}" "
   clone_or_update zsh-syntax-highlighting https://github.com/zsh-users/zsh-syntax-highlighting.git
 "
 
-log "Installing fastfetch if apt didn't provide it"
+log "Installing fastfetch (GitHub fallback)"
 if ! has_cmd fastfetch; then
-  warn "fastfetch not installed via apt. Installing from GitHub latest release (amd64 only)."
-
   ARCH="$(dpkg --print-architecture)"
-  if [[ "${ARCH}" != "amd64" ]]; then
-    warn "Non-amd64 architecture (${ARCH}). Skipping fastfetch GitHub install."
-  else
+  if [[ "${ARCH}" == "amd64" ]]; then
     tmpdir="$(mktemp -d)"
-    url="$(curl -fsSL https://api.github.com/repos/fastfetch-cli/fastfetch/releases/latest \
-      | grep -Eo 'https://[^"]+amd64\.deb' | head -n1 || true)"
-    if [[ -z "${url}" ]]; then
-      warn "Could not find fastfetch amd64 .deb from GitHub API. Skipping."
-    else
-      log "Downloading: ${url}"
+    url="$(curl -fsSL https://api.github.com/repos/fastfetch-cli/fastfetch/releases/latest | grep -Eo 'https://[^"]+amd64\.deb' | head -n1 || true)"
+    if [[ -n "${url}" ]]; then
       curl -fsSL "${url}" -o "${tmpdir}/fastfetch.deb"
       dpkg -i "${tmpdir}/fastfetch.deb" || apt-get -f install -y
     fi
@@ -202,8 +189,3 @@ if ! has_cmd fastfetch; then
 fi
 
 log "Done."
-echo
-echo "Test:"
-echo "  su - ${TARGET_USER}"
-echo "  echo \$SHELL"
-echo "  ls -al ~/.zsh/plugins"
