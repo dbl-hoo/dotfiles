@@ -66,6 +66,28 @@ alias cat='bat --paging=never'
 # Use bat for viewing files with a pager (helpful for logs)
 alias less='bat'
 
+alias dcu='docker compose up -d'
+alias dcd='docker compose down'
+alias dcr='docker compose restart'
+alias dps='docker ps --format "table {{.Names}}\t{{.Status}}\t{{.Ports}}"'
+alias dlogs='docker logs -f'
+alias dstop='docker stop'
+alias dstart='docker start'
+# Remove stopped containers
+alias dprune='docker container prune -f'
+
+# Remove unused images
+alias diprune='docker image prune -f'
+
+# Remove unused volumes (be careful with this one)
+alias dvprune='docker volume prune -f'
+
+# Nuclear option — cleans containers, images, networks, build cache
+alias dclean='docker system prune -af'
+
+# See how much disk Docker is using
+alias dsize='docker system df'
+
 # ---- Run fastfetch on interactive shells only, and only if installed
 if [[ $- == *i* ]] && command -v fastfetch >/dev/null 2>&1; then
   fastfetch
