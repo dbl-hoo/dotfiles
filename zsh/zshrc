@@ -50,6 +50,7 @@ alias gps='git push'
 alias gpl='git pull'
 alias ff='fastfetch'
 alias c='clear'
+alias reload='source ~/.zshrc'
 
 # Basic replacement for 'ls'
 alias ls='eza --icons --group-directories-first'
