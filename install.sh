@@ -61,6 +61,7 @@ PKGS=(
   openssh-client
   gnupg
   wget
+  eza
 )
 
 apt-get install -y "${PKGS[@]}"
@@ -79,22 +80,6 @@ log "Creating symlinks for bat"
 # Debian names the 'bat' executable 'batcat' to avoid conflicts
 if has_cmd batcat && ! has_cmd bat; then
   ln -sf /usr/bin/batcat /usr/local/bin/bat
-fi
-
-log "Installing eza (GitHub releases)"
-if ! has_cmd eza; then
-  ARCH="$(dpkg --print-architecture)"
-  tmpdir="$(mktemp -d)"
-  eza_url="$(curl -fsSL https://api.github.com/repos/eza-community/eza/releases/latest \
-    | grep -Eo "https://[^\"]+eza_${ARCH}\.tar\.gz" | head -n1 || true)"
-  if [[ -n "${eza_url}" ]]; then
-    curl -fsSL "${eza_url}" -o "${tmpdir}/eza.tar.gz"
-    tar -xzf "${tmpdir}/eza.tar.gz" -C "${tmpdir}"
-    install -m 755 "${tmpdir}/eza" /usr/local/bin/eza
-  else
-    warn "Could not find eza release for arch '${ARCH}'; skipping."
-  fi
-  rm -rf "${tmpdir}"
 fi
 
 log "Ensuring locale exists (en_US.UTF-8)"
