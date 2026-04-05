@@ -43,6 +43,9 @@ else
   warn "No /etc/os-release found. Continuing anyway."
 fi
 
+log "Removing stale apt sources (if any)"
+rm -f /etc/apt/sources.list.d/gierrt.list /etc/apt/keyrings/gierrt.gpg
+
 log "Updating apt + installing dependencies"
 export DEBIAN_FRONTEND=noninteractive
 apt-get update -y
