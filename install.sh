@@ -62,17 +62,8 @@ PKGS=(
 
 apt-get install -y "${PKGS[@]}"
 
-log "Adding eza repository (Debian Bookworm)"
-# Bookworm doesn't have eza in main repos; we add the community repo
-if ! has_cmd eza; then
-  mkdir -p /etc/apt/keyrings
-  wget -qO- https://raw.githubusercontent.com/eza-community/eza/main/deb.asc | gpg --dearmor -o /etc/apt/keyrings/gierrt.gpg
-  echo "deb [signed-by=/etc/apt/keyrings/gierrt.gpg] http://deb.gierrt.me debian main" | tee /etc/apt/sources.list.d/gierrt.list
-  apt-get update -y
-fi
-
 log "Installing main packages"
-OPTIONAL_PKGS=(fontconfig bat eza)
+OPTIONAL_PKGS=(fontconfig bat)
 
 # fastfetch (check repo availability)
 if apt-cache show fastfetch >/dev/null 2>&1; then
@@ -81,10 +72,26 @@ fi
 
 apt-get install -y "${OPTIONAL_PKGS[@]}" || true
 
-log "Creating symlinks for bat and eza"
+log "Creating symlinks for bat"
 # Debian names the 'bat' executable 'batcat' to avoid conflicts
 if has_cmd batcat && ! has_cmd bat; then
   ln -sf /usr/bin/batcat /usr/local/bin/bat
+fi
+
+log "Installing eza (GitHub releases)"
+if ! has_cmd eza; then
+  ARCH="$(dpkg --print-architecture)"
+  tmpdir="$(mktemp -d)"
+  eza_url="$(curl -fsSL https://api.github.com/repos/eza-community/eza/releases/latest \
+    | grep -Eo "https://[^\"]+eza_${ARCH}\.tar\.gz" | head -n1 || true)"
+  if [[ -n "${eza_url}" ]]; then
+    curl -fsSL "${eza_url}" -o "${tmpdir}/eza.tar.gz"
+    tar -xzf "${tmpdir}/eza.tar.gz" -C "${tmpdir}"
+    install -m 755 "${tmpdir}/eza" /usr/local/bin/eza
+  else
+    warn "Could not find eza release for arch '${ARCH}'; skipping."
+  fi
+  rm -rf "${tmpdir}"
 fi
 
 log "Ensuring locale exists (en_US.UTF-8)"
