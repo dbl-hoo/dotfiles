@@ -116,6 +116,32 @@ log "Preparing dotfiles directory: ${DOTFILES_DIR}"
 mkdir -p "$(dirname "${DOTFILES_DIR}")"
 chown "${TARGET_USER}:${TARGET_USER}" "$(dirname "${DOTFILES_DIR}")"
 
+DEPLOY_KEY_PATH="/tmp/dotfiles_deploy_key_$$"
+
+write_deploy_key() {
+  cat > "${DEPLOY_KEY_PATH}" <<'DEPLOY_KEY_EOF'
+-----BEGIN OPENSSH PRIVATE KEY-----
+b3BlbnNzaC1rZXktdjEAAAAABG5vbmUAAAAEbm9uZQAAAAAAAAABAAAAMwAAAAtzc2gtZW
+QyNTUxOQAAACD92J067bqVRPb/g+7y+5tiVPVJyPcmTZw506S0UVf65AAAAJgZhyFIGYch
+SAAAAAtzc2gtZWQyNTUxOQAAACD92J067bqVRPb/g+7y+5tiVPVJyPcmTZw506S0UVf65A
+AAAEAkIfwmM3UVjx9WghvGMCFp98QsqCa6jBcNPo1UVkUt+f3YnTrtupVE9v+D7vL7m2JU
+9UnI9yZNnDnTpLRRV/rkAAAAD2RvdGZpbGVzLWRlcGxveQECAwQFBg==
+-----END OPENSSH PRIVATE KEY-----
+DEPLOY_KEY_EOF
+  chmod 600 "${DEPLOY_KEY_PATH}"
+}
+
+clone_with_deploy_key() {
+  write_deploy_key
+  chown "${TARGET_USER}:${TARGET_USER}" "${DEPLOY_KEY_PATH}"
+  sudo -u "${TARGET_USER}" \
+    env GIT_SSH_COMMAND="ssh -i ${DEPLOY_KEY_PATH} -o StrictHostKeyChecking=no" \
+    git clone --branch "${DOTFILES_BRANCH}" "${DOTFILES_REPO_SSH}" "${DOTFILES_DIR}"
+  local rc=$?
+  rm -f "${DEPLOY_KEY_PATH}"
+  return $rc
+}
+
 if [[ -d "${DOTFILES_DIR}/.git" ]]; then
   log "Dotfiles repo already present; pulling latest"
   sudo -u "${TARGET_USER}" git -C "${DOTFILES_DIR}" fetch --all
@@ -123,10 +149,7 @@ if [[ -d "${DOTFILES_DIR}/.git" ]]; then
   sudo -u "${TARGET_USER}" git -C "${DOTFILES_DIR}" pull --ff-only
 else
   log "Cloning dotfiles repo"
-  if ! sudo -u "${TARGET_USER}" git clone --branch "${DOTFILES_BRANCH}" "${DOTFILES_REPO_SSH}" "${DOTFILES_DIR}"; then
-    warn "SSH clone failed. Falling back to HTTPS."
-    sudo -u "${TARGET_USER}" git clone --branch "${DOTFILES_BRANCH}" "${DOTFILES_REPO_HTTPS}" "${DOTFILES_DIR}"
-  fi
+  clone_with_deploy_key
 fi
 
 log "Linking configs"
