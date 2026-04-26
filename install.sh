@@ -61,7 +61,6 @@ PKGS=(
   openssh-client
   gnupg
   wget
-  eza
 )
 
 apt-get install -y "${PKGS[@]}"
@@ -168,6 +167,21 @@ run_as_user "${TARGET_USER}" "
   clone_or_update zsh-autosuggestions https://github.com/zsh-users/zsh-autosuggestions.git
   clone_or_update zsh-syntax-highlighting https://github.com/zsh-users/zsh-syntax-highlighting.git
 "
+
+log "Installing eza (GitHub release)"
+if ! has_cmd eza; then
+  ARCH="$(dpkg --print-architecture)"
+  if [[ "${ARCH}" == "amd64" ]]; then
+    tmpdir="$(mktemp -d)"
+    url="$(curl -fsSL https://api.github.com/repos/eza-community/eza/releases/latest | grep -Eo 'https://[^"]+eza_x86_64-unknown-linux-gnu\.tar\.gz' | head -n1 || true)"
+    if [[ -n "${url}" ]]; then
+      curl -fsSL "${url}" -o "${tmpdir}/eza.tar.gz"
+      tar -xzf "${tmpdir}/eza.tar.gz" -C "${tmpdir}"
+      install -m755 "${tmpdir}/eza" /usr/local/bin/eza
+    fi
+    rm -rf "${tmpdir}"
+  fi
+fi
 
 log "Installing fastfetch (GitHub fallback)"
 if ! has_cmd fastfetch; then
