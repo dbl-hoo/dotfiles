@@ -1,1 +1,101 @@
-/nix/store/ywxq4j9hxgy6vwblrdwzwjkncszxbbj4-home-manager-files/.config/fastfetch/config.jsonc
+{
+  "display": {
+    "separator": "\t"
+  },
+  "modules": [
+    "break",
+    {
+      "format": "{#31}┌───────────────  | OS Info ───────────────┐",
+      "type": "custom"
+    },
+    {
+      "key": "  OS      ",
+      "type": "os"
+    },
+    {
+      "key": " 󰧨 Kernel",
+      "type": "kernel"
+    },
+    {
+      "key": "  Pkgs",
+      "type": "packages"
+    },
+    {
+      "key": "  Processes",
+      "type": "processes"
+    },
+    {
+      "format": "{#31}└───────────────────────────────────────────┘",
+      "type": "custom"
+    },
+    "break",
+    {
+      "format": "{#32}┌──────────────  | User Info ──────────────┐",
+      "type": "custom"
+    },
+    {
+      "key": "  Username",
+      "text": "whoami",
+      "type": "command"
+    },
+    {
+      "key": " 󰖲 WM     ",
+      "type": "WM"
+    },
+    {
+      "key": "  Theme",
+      "type": "theme"
+    },
+    {
+      "key": "  Term",
+      "type": "terminal"
+    },
+    {
+      "format": "{#32}└───────────────────────────────────────────┘",
+      "type": "custom"
+    },
+    "break",
+    {
+      "format": "{#34}┌─────────────── 󰋊 | HW Info ───────────────┐",
+      "type": "custom"
+    },
+    {
+      "key": "  Host",
+      "type": "host"
+    },
+    {
+      "key": " 󰘚 CPU",
+      "type": "cpu"
+    },
+    {
+      "key": "  Memory",
+      "type": "memory"
+    },
+    {
+      "key": "  Disk",
+      "type": "disk"
+    },
+    {
+      "key": " 󱫐 Uptime ",
+      "type": "uptime"
+    },
+    {
+      "key": "  Local IP ",
+      "type": "localip"
+    },
+    {
+      "key": " 󰛳 Public IP ",
+      "type": "publicip"
+    },
+    {
+      "format": "{#34}└───────────────────────────────────────────┘",
+      "type": "custom"
+    },
+    {
+      "paddingLeft": 15,
+      "symbol": "circle",
+      "type": "colors"
+    },
+    "break"
+  ]
+}
