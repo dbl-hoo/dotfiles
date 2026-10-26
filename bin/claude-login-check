@@ -1,0 +1,69 @@
+#!/usr/bin/env python3
+"""claude-login-check: warn before this host's Claude Code login expires.
+
+A /login sign-in lapses on a fixed date (claudeAiOauth.refreshTokenExpiresAt in
+~/.claude/.credentials.json). Long-running agents never restart, so they never
+see Claude Code's own "expires in 3 days" startup warning; once it lapses,
+every request fails until someone runs /login. Every session run by the same
+user shares this one file, so one /login renews them all.
+
+Run daily. Silent while more than --days remain. Otherwise alerts via Pushover
+(when --env names a file with PUSHOVER_APP_TOKEN / PUSHOVER_USER_KEY) or a
+desktop notification (notify-send). Reads timestamps only, never the tokens.
+
+  claude-login-check [--days 5] [--env /path/.env] [--who "Jack, Bones..."] [--dry-run]
+"""
+import argparse, json, os, socket, subprocess, sys, time, urllib.parse, urllib.request
+
+ap = argparse.ArgumentParser()
+ap.add_argument("--days", type=float, default=5)
+ap.add_argument("--env", help="file with PUSHOVER_APP_TOKEN and PUSHOVER_USER_KEY")
+ap.add_argument("--who", default="", help="which agents use this login, for the message")
+ap.add_argument("--dry-run", action="store_true", help="print the alert (and the status) instead of sending")
+a = ap.parse_args()
+
+host = socket.gethostname().split(".")[0]
+path = os.path.expanduser("~/.claude/.credentials.json")
+try:
+    oauth = json.load(open(path)).get("claudeAiOauth") or {}
+except FileNotFoundError:
+    oauth = {}
+exp = oauth.get("refreshTokenExpiresAt")
+
+if exp is None:
+    title = f"Claude login on {host}: unknown"
+    body = f"No claude.ai login expiry found in {path}. Not signed in, or an API key / token is in use."
+    left = None
+else:
+    left = (exp / 1000 - time.time()) / 86400
+    when = time.strftime("%a %d %b %H:%M", time.localtime(exp / 1000))
+    who = f" ({a.who})" if a.who else ""
+    if left <= 0:
+        title = f"Claude login on {host} has EXPIRED"
+        body = f"Expired {when}. Agents here{who} are failing every request. Run /login in any session to restore them."
+    else:
+        title = f"Claude login on {host} expires in {left:.0f} day{'s' if round(left) != 1 else ''}"
+        body = f"Expires {when}. Run /login in any Claude session on {host}{who} to renew it for all of them."
+
+if a.dry_run:
+    print(f"status: {left:.1f} days left" if left is not None else "status: no expiry found")
+    print(("WOULD ALERT: " if left is None or left <= a.days else "quiet (above threshold); alert would be: ") + title)
+    print(body)
+    sys.exit(0)
+if left is not None and left > a.days:
+    sys.exit(0)
+
+if a.env:
+    env = {}
+    for line in open(a.env):
+        line = line.strip()
+        if "=" in line and not line.startswith("#"):
+            k, v = line.split("=", 1)
+            env[k.strip()] = v.strip().strip('"').strip("'")
+    data = urllib.parse.urlencode({"token": env["PUSHOVER_APP_TOKEN"], "user": env["PUSHOVER_USER_KEY"],
+                                   "title": title, "message": body, "priority": 1 if (left or 0) <= 1 else 0}).encode()
+    with urllib.request.urlopen("https://api.pushover.net/1/messages.json", data, timeout=20) as r:
+        if r.status != 200:
+            sys.exit(f"claude-login-check: Pushover returned {r.status}")
+else:
+    subprocess.run(["notify-send", "-a", "Claude login", "-u", "critical" if (left or 0) <= 1 else "normal", title, body], check=False)
